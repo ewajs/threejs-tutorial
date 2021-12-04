@@ -4,7 +4,7 @@ Hey, I hope you enjoy playing with this simple simulation. It's important to not
 
 Of course, you know that the Sun does not revolve around the Earth as the Moon does, but from Earth's perspective this is a good enough approximation for our toy model.
 
-Times are also not accurate but at least I strived to make them _relatively_ accurate: A Moon revolution and/or rotation will take 28 Earth's rotations (which should keep the moon Tidally locked to Earth as in real life). The Sun will also take 365.25 Earth rotations. The Sun's rotational period is just a random number I chose. I got tired...
+Times are also not accurate but at least I strived to make them _relatively_ accurate: A Moon revolution and/or rotation will take 28 Earth's rotations (which should keep the moon Tidally locked to Earth as in real life). The Sun will also take 365.25 Earth rotations to revolve around Earth. The Sun's rotational period is just a random number I chose. I got tired...
 
 Earth's tilt (which is 23.4 degrees and is the reason we have seasons) is also accurate, so you should see that the poles get alternatively lit by the sun as time goes by. The Moon's Orbital tilt (the Moon's orbit as seen edge on does not align with the plane that contains the Earth and the Sun, rather it tilts about 5 degrees) is also more or less accurate.
 
