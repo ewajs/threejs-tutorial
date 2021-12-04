@@ -10,7 +10,7 @@ Earth's tilt (which is 23.4 degrees and is the reason we have seasons) is also a
 
 You'll see very frequent eclipses in the simulation, this is due to many facts, the most important one is that I have modeled the Sun's light as a plane which is not true (the Sun emits light that propagates in a Sphere and not a Plane), this coupled with the fact that distances are for beauty and not accuracy and other orbital elements not being modeled at all yields way more eclipses than you should expect in real life.
 
-Eclipses also look different given all the above, and also because we have an Atmosphere with many amazing properties that I chose not to model (meaning I don't yet have the slightest clue as to how to do it). Although the Earth has clouds, this is just a cloud layer and not a true atmosphere which (alongside many other things I did not include in the simulation such as accurate distances and lighting) would give the edges of the eclipse their distinctive difuseness in the edges.
+Eclipses also look different given all the above, and also because we have an Atmosphere with many amazing properties that I chose not to model (meaning I don't yet have the slightest clue as to how to do it). Although the Earth has clouds, this is just a cloud layer and not a true atmosphere which (alongside many other things I did not include in the simulation such as accurate distances and lighting) would give the edges of the eclipse their distinctive difuseness.
 
 Having said all this, the TLDR is just: **This looks very little like reality for a lot of reasons but I hope you can enjoy it anyway**.
 
