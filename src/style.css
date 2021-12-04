@@ -19,7 +19,7 @@ body {
 .controls {
   position: fixed;
   bottom: 30px;
-  width: 200px;
+  width: 300px;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -33,5 +33,16 @@ body {
 
 .controls > input {
   display: block;
-  margin: 0 auto;
+  margin: 10px auto;
+}
+
+.controls > p {
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 5px;
+}
+
+.controls > p > a {
+  color: lightblue;
 }
