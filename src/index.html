@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ThreeJS Starter</title>
-</head>
-<body>
+  </head>
+  <body>
     <canvas class="webgl"></canvas>
-</body>
+    <div class="controls">
+      <h1>Time Scale: <span>1</span>x</h1>
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="1"
+        class="slider"
+        step="1"
+        id="timeScaleSlider"
+      />
+    </div>
+  </body>
 </html>

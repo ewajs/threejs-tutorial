@@ -204,6 +204,16 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 /**
+ * UI
+ */
+const timeScaleSlider = document.getElementById("timeScaleSlider");
+const timeScaleSpan = document.querySelector(".controls span");
+timeScaleSlider.addEventListener("change", () => {
+  timeScale = timeScaleSlider.value;
+  timeScaleSpan.innerText = timeScale;
+});
+
+/**
  * Animate
  */
 
