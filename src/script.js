@@ -250,6 +250,29 @@ timeScaleSlider.addEventListener("change", () => {
   timeScaleSpan.innerText = timeScale;
 });
 
+const timeScaleMinus = document.getElementById("timeScaleMinus");
+timeScaleMinus.addEventListener("click", () => {
+  const currentValue = parseFloat(timeScaleSlider.value);
+  const step = parseFloat(timeScaleSlider.step);
+  if (currentValue > 0) {
+    timeScale = currentValue - step;
+    timeScaleSlider.value = timeScale.toFixed(1);
+    timeScaleSpan.innerText = timeScale.toFixed(1);
+  }
+});
+
+const timeScalePlus = document.getElementById("timeScalePlus");
+timeScalePlus.addEventListener("click", () => {
+  const currentValue = parseFloat(timeScaleSlider.value);
+  const step = parseFloat(timeScaleSlider.step);
+  const max = parseFloat(timeScaleSlider.max);
+  if (currentValue < max) {
+    timeScale = currentValue + step;
+    timeScaleSlider.value = timeScale.toFixed(1);
+    timeScaleSpan.innerText = timeScale.toFixed(1);
+  }
+});
+
 /**
  * Animate
  */

@@ -9,15 +9,20 @@
     <canvas class="webgl"></canvas>
     <div class="controls">
       <h1>Time Scale: <span>1</span>x</h1>
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value="1"
-        class="slider"
-        step="0.1"
-        id="timeScaleSlider"
-      />
+      <div class="container">
+        <button id="timeScaleMinus">-</button>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value="1"
+          class="slider"
+          step="0.1"
+          id="timeScaleSlider"
+        />
+        <button id="timeScalePlus">+</button>
+      </div>
+
       <p>
         This is a toy model, most things are not to scale,
         <a href="https://ewajs.github.io/threejs-tutorial/">read more</a>
