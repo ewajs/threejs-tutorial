@@ -45,7 +45,7 @@ const earthNormalMap = textureLoader.load("./textures/earthNormalMap.png");
 
 ////// Earth's Atmosphere (clouds)
 const earthCloudsTexture = textureLoader.load(
-  "/textures/earthCloudsTexture.png"
+  "./textures/earthCloudsTexture.png"
 );
 
 //// Moon
