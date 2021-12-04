@@ -28,6 +28,11 @@ const EARTH_ATMOSPHERE_ROTATIONAL_PERIOD = 0.8 * EARTH_ROTATIONAL_PERIOD;
 const MOON_ORBITAL_PLANE_INCLINATION = MathUtils.degToRad(5);
 const MOON_ORBITAL_DISPLACEMENT =
   Math.tan(MOON_ORBITAL_PLANE_INCLINATION) * EARTH_MOON_DISTANCE;
+
+const BACKGROUND_STAR_FIELD_DISTANCE = 1000;
+const BACKGROUND_STAR_RADIUS = 10000;
+const BACkGROUND_STARS = 200;
+
 //// Rendering Constants
 const SPHERE_SEGMENTS = 64;
 const DIRECTIONAL_LIGHT_DISTANCE = 10;
@@ -85,6 +90,13 @@ const sunGeometry = new THREE.SphereGeometry(
   SPHERE_SEGMENTS
 );
 
+//// Background Stars
+const bgStarGeometry = new THREE.SphereGeometry(
+  BACKGROUND_STAR_RADIUS * SCALE,
+  8,
+  8
+);
+
 // Materials
 /// Earth
 const earthMaterial = new THREE.MeshStandardMaterial();
@@ -105,6 +117,17 @@ moonMaterial.map = moonTexture;
 const sunMaterial = new THREE.MeshBasicMaterial();
 sunMaterial.map = sunTexture;
 
+//// Background Stars
+const AVAILABLE_COLORS = [
+  0xfffa78, 0xffabab, 0xa8adff, 0xffffff, 0xffffff, 0xffffff, 0xffffff,
+  0xffffff, 0xffffff,
+];
+const bgStarMaterials = AVAILABLE_COLORS.map((color) => {
+  const bgStarMaterial = new THREE.MeshBasicMaterial();
+  bgStarMaterial.color = new THREE.Color(color);
+  return bgStarMaterial;
+});
+console.log(bgStarMaterials);
 // Meshes
 //// Earth
 const earth = new THREE.Mesh(earthGeometry, earthMaterial);
@@ -139,7 +162,21 @@ const sun = new THREE.Mesh(sunGeometry, sunMaterial);
 sun.position.setX(EARTH_SUN_DISTANCE * SCALE);
 scene.add(sun);
 
-// Lights
+//// Background Stars
+for (let index = 0; index < BACkGROUND_STARS; index++) {
+  // Create stars with random colors
+  const material =
+    bgStarMaterials[Math.floor(Math.random() * bgStarMaterials.length)];
+  const bgStarMesh = new THREE.Mesh(bgStarGeometry, material);
+  bgStarMesh.position.setFromSphericalCoords(
+    BACKGROUND_STAR_FIELD_DISTANCE,
+    Math.random() * 2 * Math.PI,
+    Math.random() * 2 * Math.PI
+  );
+  scene.add(bgStarMesh);
+}
+
+// Light
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.x = DIRECTIONAL_LIGHT_DISTANCE;
@@ -181,7 +218,7 @@ const camera = new THREE.PerspectiveCamera(
   75,
   sizes.width / sizes.height,
   0.1,
-  100
+  2000
 );
 camera.position.x = 5;
 camera.position.y = 0;
