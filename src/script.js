@@ -40,8 +40,8 @@ const DIRECTIONAL_LIGHT_DISTANCE = 10;
 // Loading
 const textureLoader = new THREE.TextureLoader();
 //// Earth
-const earthTexture = textureLoader.load("/textures/earthTexture.jpg");
-const earthNormalMap = textureLoader.load("/textures/earthNormalMap.png");
+const earthTexture = textureLoader.load("./textures/earthTexture.jpg");
+const earthNormalMap = textureLoader.load("./textures/earthNormalMap.png");
 
 ////// Earth's Atmosphere (clouds)
 const earthCloudsTexture = textureLoader.load(
@@ -49,11 +49,11 @@ const earthCloudsTexture = textureLoader.load(
 );
 
 //// Moon
-const moonTexture = textureLoader.load("/textures/moonTexture.png");
-const moonNormalMap = textureLoader.load("/textures/moonNormalMap.png");
+const moonTexture = textureLoader.load("./textures/moonTexture.png");
+const moonNormalMap = textureLoader.load("./textures/moonNormalMap.png");
 
 //// Sun
-const sunTexture = textureLoader.load("/textures/sunTexture.jpg");
+const sunTexture = textureLoader.load("./textures/sunTexture.jpg");
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
