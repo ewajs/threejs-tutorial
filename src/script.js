@@ -2,7 +2,6 @@ import "./style.css";
 import * as THREE from "three";
 import { MathUtils } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import * as dat from "dat.gui";
 
 /// Constants
 //// Accurate Astronomical Constants (km)
@@ -21,7 +20,8 @@ const MOON_ROTATIONAL_PERIOD = 120;
 // We'll make time scales accurate relative to moon period
 const EARTH_ROTATIONAL_PERIOD = (1 * MOON_ROTATIONAL_PERIOD) / 28;
 const MOON_ORBITAL_PERIOD = MOON_ROTATIONAL_PERIOD; // At least we'll have tidal locking
-
+// I KNOW THE SUN DOES NOT ROTATE AROUND THE EARTH, THIS IS A TOY GEOCENTRIC MODEL.
+const SUN_ORBITAL_PERIOD = 365.25 * EARTH_ROTATIONAL_PERIOD;
 // This is fake, we'll make the atmosphere rotate 20% faster than the Earth itself
 const EARTH_ATMOSPHERE_ROTATIONAL_PERIOD = 0.8 * EARTH_ROTATIONAL_PERIOD;
 
@@ -30,6 +30,7 @@ const MOON_ORBITAL_DISPLACEMENT =
   Math.tan(MOON_ORBITAL_PLANE_INCLINATION) * EARTH_MOON_DISTANCE;
 //// Rendering Constants
 const SPHERE_SEGMENTS = 64;
+const DIRECTIONAL_LIGHT_DISTANCE = 10;
 
 // Loading
 const textureLoader = new THREE.TextureLoader();
@@ -46,8 +47,8 @@ const earthCloudsTexture = textureLoader.load(
 const moonTexture = textureLoader.load("/textures/moonTexture.png");
 const moonNormalMap = textureLoader.load("/textures/moonNormalMap.png");
 
-// Debug
-const gui = new dat.GUI();
+//// Sun
+const sunTexture = textureLoader.load("/textures/sunTexture.jpg");
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -77,6 +78,13 @@ const moonGeometry = new THREE.SphereGeometry(
   SPHERE_SEGMENTS
 );
 
+//// Sun
+const sunGeometry = new THREE.SphereGeometry(
+  SUN_RADIUS * SCALE,
+  SPHERE_SEGMENTS,
+  SPHERE_SEGMENTS
+);
+
 // Materials
 /// Earth
 const earthMaterial = new THREE.MeshStandardMaterial();
@@ -92,6 +100,10 @@ earthCloudsMaterial.transparent = true;
 const moonMaterial = new THREE.MeshStandardMaterial();
 moonMaterial.normalMap = moonNormalMap;
 moonMaterial.map = moonTexture;
+
+//// Sun (we don't want this affected by lighting)
+const sunMaterial = new THREE.MeshBasicMaterial();
+sunMaterial.map = sunTexture;
 
 // Meshes
 //// Earth
@@ -122,10 +134,15 @@ moon.castShadow = true;
 moon.receiveShadow = true;
 scene.add(moon);
 
+//// Sun
+const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+sun.position.setX(EARTH_SUN_DISTANCE * SCALE);
+scene.add(sun);
+
 // Lights
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight.position.x = 10;
+directionalLight.position.x = DIRECTIONAL_LIGHT_DISTANCE;
 directionalLight.position.y = 0;
 directionalLight.position.z = 0;
 directionalLight.castShadow = true;
@@ -193,9 +210,10 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 const clock = new THREE.Clock();
 let lastEarthAngle = 0;
 let lastEarthAtmosphereAngle = 0;
+let timeScale = 1;
 
 const tick = () => {
-  const elapsedTime = clock.getElapsedTime();
+  const elapsedTime = clock.getElapsedTime() * timeScale;
 
   const earthAngleDelta =
     ((((2 * Math.PI) / EARTH_ROTATIONAL_PERIOD) * elapsedTime) %
@@ -213,6 +231,7 @@ const tick = () => {
   earth.rotateOnAxis(earthAxis, earthAngleDelta);
   earthClouds.rotateOnAxis(earthAxis, earthAtmosphereAngleDelta);
   moon.rotation.y = ((2 * Math.PI) / MOON_ROTATIONAL_PERIOD) * elapsedTime;
+  sun.rotation.y = ((2 * Math.PI) / SUN_ROTATIONAL_PERIOD) * elapsedTime;
 
   const newMoonX =
     EARTH_MOON_DISTANCE *
@@ -228,6 +247,20 @@ const tick = () => {
     Math.sin(-((2 * Math.PI) / MOON_ORBITAL_PERIOD) * elapsedTime);
 
   moon.position.set(newMoonX, newMoonY, newMoonZ);
+
+  const newSunX =
+    EARTH_SUN_DISTANCE *
+    SCALE *
+    Math.cos(-((2 * Math.PI) / SUN_ORBITAL_PERIOD) * elapsedTime);
+  const newSunZ =
+    EARTH_SUN_DISTANCE *
+    SCALE *
+    Math.sin(-((2 * Math.PI) / SUN_ORBITAL_PERIOD) * elapsedTime);
+
+  sun.position.setX(newSunX);
+  sun.position.setZ(newSunZ);
+  directionalLight.position.setX(newSunX);
+  directionalLight.position.setZ(newSunZ);
 
   // Update Orbital Controls
   controls.update();
