@@ -17,7 +17,7 @@ const EARTH_SUN_DISTANCE = 12 * EARTH_MOON_DISTANCE;
 const SUN_RADIUS = 10000;
 const ATMOSPHERE_RADIUS = EARTH_RADIUS + 100;
 const SUN_ROTATIONAL_PERIOD = 30;
-const MOON_ROTATIONAL_PERIOD = 10;
+const MOON_ROTATIONAL_PERIOD = 120;
 // We'll make time scales accurate relative to moon period
 const EARTH_ROTATIONAL_PERIOD = (1 * MOON_ROTATIONAL_PERIOD) / 28;
 const MOON_ORBITAL_PERIOD = MOON_ROTATIONAL_PERIOD; // At least we'll have tidal locking
@@ -36,6 +36,11 @@ const textureLoader = new THREE.TextureLoader();
 //// Earth
 const earthTexture = textureLoader.load("/textures/earthTexture.jpg");
 const earthNormalMap = textureLoader.load("/textures/earthNormalMap.png");
+
+////// Earth's Atmosphere (clouds)
+const earthCloudsTexture = textureLoader.load(
+  "/textures/earthCloudsTexture.png"
+);
 
 //// Moon
 const moonTexture = textureLoader.load("/textures/moonTexture.png");
@@ -58,6 +63,13 @@ const earthGeometry = new THREE.SphereGeometry(
   SPHERE_SEGMENTS
 );
 
+////// Earth's Atmosphere (clouds)
+const earthCloudsGeometry = new THREE.SphereGeometry(
+  ATMOSPHERE_RADIUS * SCALE,
+  SPHERE_SEGMENTS,
+  SPHERE_SEGMENTS
+);
+
 //// Moon
 const moonGeometry = new THREE.SphereGeometry(
   MOON_RADIUS * SCALE,
@@ -70,6 +82,11 @@ const moonGeometry = new THREE.SphereGeometry(
 const earthMaterial = new THREE.MeshStandardMaterial();
 earthMaterial.normalMap = earthNormalMap;
 earthMaterial.map = earthTexture;
+
+////// Earth's Atmosphere (clouds)
+const earthCloudsMaterial = new THREE.MeshStandardMaterial();
+earthCloudsMaterial.map = earthCloudsTexture;
+earthCloudsMaterial.transparent = true;
 
 //// Moon
 const moonMaterial = new THREE.MeshStandardMaterial();
@@ -90,6 +107,13 @@ const earthAxis = new THREE.Vector3(
   0
 ).normalize();
 scene.add(earth);
+
+const earthClouds = new THREE.Mesh(earthCloudsGeometry, earthCloudsMaterial);
+earthClouds.receiveShadow = true;
+earthClouds.geometry.applyMatrix(
+  new THREE.Matrix4().makeRotationZ(-EARTH_AXIAL_TILT)
+);
+scene.add(earthClouds);
 
 //// Moon
 const moon = new THREE.Mesh(moonGeometry, moonMaterial);
@@ -142,9 +166,9 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.x = 0;
+camera.position.x = 5;
 camera.position.y = 0;
-camera.position.z = 5;
+camera.position.z = 3;
 scene.add(camera);
 
 // Controls
@@ -187,6 +211,7 @@ const tick = () => {
 
   //Update objects
   earth.rotateOnAxis(earthAxis, earthAngleDelta);
+  earthClouds.rotateOnAxis(earthAxis, earthAtmosphereAngleDelta);
   moon.rotation.y = ((2 * Math.PI) / MOON_ROTATIONAL_PERIOD) * elapsedTime;
 
   const newMoonX =
